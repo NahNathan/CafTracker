@@ -1,7 +1,9 @@
 package com.nathanrds.caftracker
 
+import android.graphics.Color as AndroidColor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +17,11 @@ import com.nathanrds.caftracker.ui.theme.CafTrackerTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // Cabeçalhos das telas usam um gradiente laranja escuro, então os ícones
+        // da barra de status ficam sempre claros para manter o contraste.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(AndroidColor.TRANSPARENT)
+        )
 
         val app = application
         check(app is CafTrackerApp) {

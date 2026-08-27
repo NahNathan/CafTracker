@@ -1,16 +1,24 @@
 package com.nathanrds.caftracker.presentation.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.nathanrds.caftracker.domain.model.UnitType
 import com.nathanrds.caftracker.presentation.viewmodel.AddEditProductViewModel
+import com.nathanrds.caftracker.ui.theme.CoffeeOrange
+import com.nathanrds.caftracker.ui.theme.CoffeeOrangeLight
+import com.nathanrds.caftracker.ui.theme.PillShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,12 +30,27 @@ fun AddEditProductScreen(
     val isEditMode = uiState.productId != null
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text(if (isEditMode) "Editar Produto" else "Adicionar Produto") },
+                modifier = Modifier.background(
+                    Brush.verticalGradient(listOf(CoffeeOrangeLight, CoffeeOrange))
+                ),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
+                ),
+                title = {
+                    Text(
+                        text = if (isEditMode) "Editar Produto" else "Adicionar Produto",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Text("←")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
                     }
                 }
             )
@@ -40,40 +63,29 @@ fun AddEditProductScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Nome
-            Text(
-                text = "Nome",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionLabel(text = "Nome")
             OutlinedTextField(
                 value = uiState.name,
                 onValueChange = { viewModel.updateName(it) },
                 label = { Text("Nome do produto") },
+                shape = MaterialTheme.shapes.medium,
+                colors = coffeeTextFieldColors(),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
-            // Cafeína por unidade
-            Text(
-                text = "Cafeína por Unidade",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionLabel(text = "Cafeína por Unidade")
             OutlinedTextField(
                 value = uiState.caffeineMgPerUnitText,
                 onValueChange = { viewModel.updateCaffeineMgPerUnit(it) },
                 label = { Text("mg por unidade") },
+                shape = MaterialTheme.shapes.medium,
+                colors = coffeeTextFieldColors(),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
-            // Tipo de unidade
-            Text(
-                text = "Tipo de Unidade",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionLabel(text = "Tipo de Unidade")
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -83,44 +95,43 @@ fun AddEditProductScreen(
                         selected = uiState.unitType == unitType,
                         onClick = { viewModel.updateUnitType(unitType) },
                         label = { Text(unitType.name) },
+                        shape = MaterialTheme.shapes.small,
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            selectedLabelColor = Color.White
+                        ),
                         modifier = Modifier.weight(1f)
                     )
                 }
             }
 
-            // Quantidade padrão (opcional)
-            Text(
-                text = "Quantidade Padrão (opcional)",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionLabel(text = "Quantidade Padrão (opcional)")
             OutlinedTextField(
                 value = uiState.defaultAmountText,
                 onValueChange = { viewModel.updateDefaultAmount(it) },
                 label = { Text("Quantidade padrão") },
+                shape = MaterialTheme.shapes.medium,
+                colors = coffeeTextFieldColors(),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
-            // Notas (opcional)
-            Text(
-                text = "Notas (opcional)",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
+            SectionLabel(text = "Notas (opcional)")
             OutlinedTextField(
                 value = uiState.notes,
                 onValueChange = { viewModel.updateNotes(it) },
                 label = { Text("Notas") },
+                shape = MaterialTheme.shapes.medium,
+                colors = coffeeTextFieldColors(),
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3,
                 maxLines = 5
             )
 
-            // Mensagem de erro
             if (uiState.errorMessage != null) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
                     )
@@ -135,16 +146,31 @@ fun AddEditProductScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Botão salvar
             Button(
                 onClick = { viewModel.saveProduct(onNavigateBack) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+                shape = PillShape,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = Color.White
+                ),
                 enabled = !uiState.isSaving
             ) {
                 if (uiState.isSaving) {
-                    CircularProgressIndicator(modifier = Modifier.size(16.dp))
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
                 } else {
-                    Text(if (isEditMode) "Atualizar" else "Salvar")
+                    Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(20.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        if (isEditMode) "Atualizar" else "Salvar",
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
         }

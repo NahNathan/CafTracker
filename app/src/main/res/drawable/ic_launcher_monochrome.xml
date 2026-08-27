@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Logo do CafTracker: caneca de café dentro de um cronômetro.
-    O desenho fica dentro da área segura (72dp centrais) do adaptive icon.
+    Silhueta em cor única usada pelos ícones temáticos do Android 13+.
+    Só o alfa importa: o sistema aplica o tint do tema do usuário.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -9,33 +9,21 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Coroa do cronômetro -->
     <path
-        android:fillColor="#3D2B1E"
+        android:fillColor="#FF000000"
         android:pathData="M52.5,22.5H55.5A3,3 0 0 1 58.5,25.5V30H49.5V25.5A3,3 0 0 1 52.5,22.5Z" />
-
-    <!-- Aro do cronômetro -->
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#3D2B1E"
+        android:strokeColor="#FF000000"
         android:strokeWidth="6"
         android:pathData="M27.5,57a26.5,26.5 0 1,0 53,0a26.5,26.5 0 1,0 -53,0" />
-
-    <!-- Alça da caneca -->
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#3D2B1E"
+        android:strokeColor="#FF000000"
         android:strokeWidth="5.2"
         android:strokeLineCap="round"
         android:pathData="M60.8,51.2q8,1 7.5,5.8q-0.5,4.8 -7.5,5.8" />
-
-    <!-- Corpo da caneca -->
     <path
-        android:fillColor="#3D2B1E"
+        android:fillColor="#FF000000"
         android:pathData="M36.7,47L60.8,47L59,65.4Q58.1,70.1 53.2,70.1L44.3,70.1Q39.4,70.1 38.5,65.4Z" />
-
-    <!-- Superfície do café -->
-    <path
-        android:fillColor="#D9782E"
-        android:pathData="M38.6,50.5L58.9,50.5L58.3,56.6L39.2,56.6Z" />
 </vector>
